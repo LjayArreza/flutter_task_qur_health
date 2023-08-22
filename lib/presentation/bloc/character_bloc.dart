@@ -16,10 +16,36 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
     emit(CharacterLoading());
     try {
       final characters = await repository.fetchCharacters();
-      emit(CharacterLoaded(characters));
+      final filteredCharacters = _applyFilters(
+        characters,
+        event.nameFilter,
+        event.speciesFilter,
+        event.statusFilter,
+      );
+      emit(CharacterLoaded(filteredCharacters));
     } catch (e) {
       emit(CharacterError(e.toString()));
     }
+  }
+
+  Characters _applyFilters(
+    Characters characters,
+    String nameFilter,
+    String speciesFilter,
+    String statusFilter,
+  ) {
+    final filteredResults = characters.results.where((character) {
+      bool nameMatches =
+          character.name.toLowerCase().contains(nameFilter.toLowerCase());
+      bool speciesMatches =
+          character.species.toLowerCase().contains(speciesFilter.toLowerCase());
+      bool statusMatches =
+          character.status.toLowerCase().contains(statusFilter.toLowerCase());
+
+      return nameMatches && speciesMatches && statusMatches;
+    }).toList();
+
+    return Characters(info: characters.info, results: filteredResults);
   }
 
   Stream<CharacterState> mapEventToState(CharacterEvent event) async* {
