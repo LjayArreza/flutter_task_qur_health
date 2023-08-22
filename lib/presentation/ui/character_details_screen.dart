@@ -16,7 +16,7 @@ class CharacterDetailsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Image.network(character.image),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             Text('Status: ${character.status}'),
             Text('Species: ${character.species}'),
           ],
