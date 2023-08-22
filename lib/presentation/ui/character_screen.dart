@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_task_qur_health/presentation/bloc/character_bloc.dart';
+import 'package:flutter_task_qur_health/presentation/ui/character_details_screen.dart';
 
 class CharacterScreen extends StatelessWidget {
   const CharacterScreen({super.key});
@@ -21,20 +22,31 @@ class CharacterScreen extends StatelessWidget {
               itemCount: state.characters.results.length,
               itemBuilder: (context, index) {
                 final character = state.characters.results[index];
-                return Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: ListTile(
-                    title: Text(character.name),
-                    subtitle: Row(
-                      children: [
-                        Text('Status: ${character.status}'),
-                        const SizedBox(width: 5),
-                        const Text('|'),
-                        const SizedBox(width: 5),
-                        Text('Spices: ${character.species}')
-                      ],
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            CharacterDetailsScreen(character: character),
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: ListTile(
+                      title: Text(character.name),
+                      subtitle: Row(
+                        children: [
+                          Text('Status: ${character.status}'),
+                          const SizedBox(width: 5),
+                          const Text('|'),
+                          const SizedBox(width: 5),
+                          Text('Spices: ${character.species}')
+                        ],
+                      ),
+                      leading: Image.network(character.image),
                     ),
-                    leading: Image.network(character.image),
                   ),
                 );
               },
